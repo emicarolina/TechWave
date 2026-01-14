@@ -25,18 +25,31 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
   };
 
   const wrapperRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const [formData, setFormData] = useState(getInitialFormData);
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
-    if (!wrapper) return;
+    if (!wrapper || !isOpen) return;
+
     let isAnimating = false;
     let targetScroll = wrapper.scrollTop;
 
     const animate = () => {
       isAnimating = true;
-
       wrapper.scrollTop += (targetScroll - wrapper.scrollTop) * 0.11;
-
       if (Math.abs(targetScroll - wrapper.scrollTop) > 0.5) {
         requestAnimationFrame(animate);
       } else {
@@ -46,30 +59,31 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
 
     const onWheel = (e) => {
       e.preventDefault();
+      e.stopPropagation();
 
       targetScroll += e.deltaY;
       targetScroll = Math.max(
         0,
         Math.min(wrapper.scrollHeight - wrapper.clientHeight, targetScroll)
       );
-
       if (!isAnimating) animate();
     };
 
     wrapper.addEventListener("wheel", onWheel, { passive: false });
-
     return () => wrapper.removeEventListener("wheel", onWheel);
-  }, []);
+  }, [isOpen]);
 
-  const [formData, setFormData] = useState(getInitialFormData);
-  const [errors, setErrors] = useState({});
+  useEffect(() => {
+    const textarea = descriptionRef.current;
+    if (textarea) {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  }, [formData.description]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -77,7 +91,6 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
 
   const validateForm = () => {
     const newErrors = {};
-
     if (!formData.name.trim()) newErrors.name = "Nome é obrigatório";
     if (!formData.description.trim())
       newErrors.description = "Descrição é obrigatória";
@@ -89,22 +102,18 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
       newErrors.stock = "Estoque não pode ser negativo";
     if (!formData.imageUrl.trim())
       newErrors.imageUrl = "URL da imagem é obrigatória";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
-
     const dataToSubmit = {
       ...formData,
       price: parseFloat(formData.price),
       stock: parseInt(formData.stock),
     };
-
     await onSubmit(dataToSubmit);
   };
 
@@ -127,19 +136,21 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
             onClick={handleClose}
             className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
           />
-
           <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            onWheel={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-center justify-center p-6"
+            onWheel={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
           >
             <Motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-zinc-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              className="bg-zinc-800 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-y-auto relative mt-10"
               ref={wrapperRef}
             >
-              <div className="flex items-center justify-between p-6 border-b border-zinc-700">
+              <div className="sticky top-0 z-20 bg-zinc-800 flex items-center justify-between p-6 border-b border-zinc-700">
                 <h2 className="text-2xl font-bold text-white font-raleway">
                   {product ? "Editar Produto" : "Novo Produto"}
                 </h2>
@@ -174,11 +185,12 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
                     Descrição *
                   </label>
                   <textarea
+                    ref={descriptionRef}
                     name="description"
                     value={formData.description}
                     onChange={handleChange}
                     rows="3"
-                    className="w-full bg-zinc-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue focus:outline-none transition-all resize-none font-inter font-light"
+                    className="w-full bg-zinc-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue focus:outline-none transition-all resize-none font-inter font-light overflow-hidden min-h-30 leading-relaxed block"
                     placeholder="Descreva o produto..."
                   />
                   {errors.description && (
@@ -199,17 +211,9 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
                       value={formData.price}
                       onChange={handleChange}
                       step="0.01"
-                      min="0"
                       className="w-full bg-zinc-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue focus:outline-none transition-all font-inter font-light"
-                      placeholder="0.00"
                     />
-                    {errors.price && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.price}
-                      </p>
-                    )}
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2 font-raleway">
                       Estoque *
@@ -219,15 +223,8 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
                       name="stock"
                       value={formData.stock}
                       onChange={handleChange}
-                      min="0"
                       className="w-full bg-zinc-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue focus:outline-none transition-all font-inter font-light"
-                      placeholder="0"
                     />
-                    {errors.stock && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.stock}
-                      </p>
-                    )}
                   </div>
                 </div>
 
@@ -241,13 +238,7 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
                     value={formData.category}
                     onChange={handleChange}
                     className="w-full bg-zinc-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue focus:outline-none transition-all font-inter font-light"
-                    placeholder="Ex: Eletrônicos"
                   />
-                  {errors.category && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.category}
-                    </p>
-                  )}
                 </div>
 
                 <div>
@@ -260,25 +251,14 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
                     value={formData.imageUrl}
                     onChange={handleChange}
                     className="w-full bg-zinc-700 text-white rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue focus:outline-none transition-all font-inter font-light"
-                    placeholder="https://exemplo.com/imagem.jpg"
                   />
-                  {errors.imageUrl && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.imageUrl}
-                    </p>
-                  )}
                   {formData.imageUrl && (
                     <div className="mt-3">
-                      <p className="text-sm text-gray-400 mb-2 font-raleway">
-                        Preview:
-                      </p>
                       <img
                         src={formData.imageUrl}
                         alt="Preview"
                         className="w-32 h-32 object-cover rounded-lg"
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
+                        onError={(e) => (e.target.style.display = "none")}
                       />
                     </div>
                   )}
@@ -288,13 +268,13 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="flex-1 bg-zinc-500 hover:bg-zinc-400 text-white py-3 px-6 rounded-lg transition-colors cursor-pointer font-inter font-semibold"
+                    className="flex-1 bg-zinc-500 hover:bg-zinc-400 text-white py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 bg-zinc-900 hover:bg-zinc-950 text-white py-3 px-6 rounded-lg transition-colors cursor-pointer font-inter font-semibold"
+                    className="flex-1 bg-zinc-900 hover:bg-zinc-950 text-white py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer"
                   >
                     {product ? "Atualizar" : "Criar Produto"}
                   </button>
