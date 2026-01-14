@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blue: #6e8f99;
+  --color-darker: #111827;
+
+  --font-raleway: "Raleway", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("../src/assets/fonts/Raleway.ttf");
+}
+@font-face {
+  font-family: "Inter";
+  src: url("../src/assets/fonts/Inter.ttf");
+}
+
+body {
+  background-color: #0f131b;
+}
