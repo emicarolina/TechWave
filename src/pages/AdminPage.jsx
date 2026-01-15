@@ -4,6 +4,8 @@ import { FiPlus } from "react-icons/fi";
 import ProductCard from "../components/ProductCard";
 import ProductModal from "../components/ProductModal";
 import SearchBar from "../components/SearchBar";
+import Toast from "../components/Toast";
+import ConfirmModal from "../components/ConfirmModal";
 import { useProducts } from "../hooks/useProducts";
 
 const AdminPage = () => {
@@ -19,6 +21,22 @@ const AdminPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    product: null,
+  });
+
+  const showNotification = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ ...toast, show: false }), 3000);
+  };
 
   const filteredProducts = products.filter((product) => {
     const searchLower = searchTerm.toLowerCase();
@@ -39,18 +57,21 @@ const AdminPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (product) => {
-    const confirmed = window.confirm(
-      `Tem certeza que deseja deletar "${product.name}"?`
-    );
+  const handleDeleteClick = (product) => {
+    setDeleteModal({ show: true, product });
+  };
 
-    if (confirmed) {
-      const result = await deleteProduct(product._id);
-      if (result.success) {
-        alert("Produto deletado com sucesso!");
-      } else {
-        alert(result.error || "Erro ao deletar produto");
-      }
+  const handleConfirmDelete = async () => {
+    const product = deleteModal.product;
+    if (!product) return;
+
+    const result = await deleteProduct(product._id);
+    setDeleteModal({ show: false, product: null });
+
+    if (result.success) {
+      showNotification("Produto deletado com sucesso!");
+    } else {
+      showNotification(result.error || "Erro ao deletar produto", "error");
     }
   };
 
@@ -65,13 +86,13 @@ const AdminPage = () => {
 
     if (result.success) {
       setIsModalOpen(false);
-      alert(
+      showNotification(
         selectedProduct
           ? "Produto atualizado com sucesso!"
           : "Produto criado com sucesso!"
       );
     } else {
-      alert(result.error || "Erro ao salvar produto");
+      showNotification(result.error || "Erro ao salvar produto", "error");
     }
   };
 
@@ -124,45 +145,6 @@ const AdminPage = () => {
           </Motion.div>
         )}
 
-        {!loading && !error && products.length === 0 && (
-          <Motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-20"
-          >
-            <p className="text-gray-400 text-xl mb-4">
-              Nenhum produto cadastrado ainda
-            </p>
-            <button
-              onClick={handleNewProduct}
-              className="text-blue hover:text-blue/80 font-medium transition-colors"
-            >
-              Clique aqui para criar o primeiro produto
-            </button>
-          </Motion.div>
-        )}
-
-        {!loading &&
-          !error &&
-          products.length > 0 &&
-          filteredProducts.length === 0 && (
-            <Motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center py-20"
-            >
-              <p className="text-gray-400 text-xl mb-4">
-                Nenhum produto encontrado para "{searchTerm}"
-              </p>
-              <button
-                onClick={handleClearSearch}
-                className="text-blue hover:text-blue/80 font-medium transition-colors"
-              >
-                Limpar busca
-              </button>
-            </Motion.div>
-          )}
-
         {!loading && !error && filteredProducts.length > 0 && (
           <Motion.div
             initial={{ opacity: 0 }}
@@ -180,7 +162,7 @@ const AdminPage = () => {
                 <ProductCard
                   product={product}
                   onEdit={handleEdit}
-                  onDelete={handleDelete}
+                  onDelete={handleDeleteClick}
                 />
               </Motion.div>
             ))}
@@ -195,6 +177,16 @@ const AdminPage = () => {
         onSubmit={handleSubmit}
         product={selectedProduct}
       />
+
+      <ConfirmModal
+        isOpen={deleteModal.show}
+        title="Excluir Produto"
+        message={`Tem certeza que deseja deletar "${deleteModal.product?.name}"? Esta ação é irreversível.`}
+        onClose={() => setDeleteModal({ show: false, product: null })}
+        onConfirm={handleConfirmDelete}
+      />
+
+      <Toast isVisible={toast.show} message={toast.message} type={toast.type} />
     </div>
   );
 };

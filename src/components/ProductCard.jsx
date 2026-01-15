@@ -5,12 +5,12 @@ import {
   FiTrash2,
   FiShoppingCart,
   FiShoppingBag,
-  FiCheckCircle,
   FiX,
 } from "react-icons/fi";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
+import Toast from "./Toast";
 
 const ProductCard = ({ product, onEdit, onDelete }) => {
   const { user } = useAuth();
@@ -35,9 +35,8 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
       return;
     }
     addToCart(product);
-
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 1500);
+    setTimeout(() => setShowToast(false), 3000);
   };
 
   const handleBuy = () => {
@@ -146,21 +145,11 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
         </div>
       </Motion.div>
 
-      <AnimatePresence>
-        {showToast && (
-          <Motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 50 }}
-            className="fixed bottom-6 right-6 z-50 bg-blue text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-white/10"
-          >
-            <FiCheckCircle size={20} className="text-white" />
-            <span className="font-inter text-sm font-medium">
-              Adicionado ao carrinho!
-            </span>
-          </Motion.div>
-        )}
-      </AnimatePresence>
+      <Toast
+        isVisible={showToast}
+        message="Adicionado ao carrinho!"
+        type="success"
+      />
 
       <AnimatePresence>
         {showModal && (
