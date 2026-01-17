@@ -1,43 +1,44 @@
 # TechWave E-commerce
-O TechWave é uma SPA (Single Page Application) que simula uma loja virtual completa, permitindo que usuários naveguem, pesquisem, comprem produtos e gerenciem um carrinho de compras. Administradores têm acesso a um painel exclusivo para gerenciar o catálogo de produtos (CRUD completo).
+TechWave is a Single Page Application (SPA) that simulates a complete online store, allowing users to browse, search, purchase products, and manage a shopping cart.  
+Administrators have access to an exclusive dashboard to manage the product catalog with full CRUD capabilities.
 
-A aplicação consome dados de uma API REST privada desenvolvida exclusivamente para este projeto.
-### 🔗 Repositório da API: [TechWave-API](https://github.com/emicarolina/TechWave-API)
+The application consumes data from a **private REST API** developed exclusively for this project.
+### 🔗 API Repository: [TechWave-API](https://github.com/emicarolina/TechWave-API)
 
-## Tecnologias Utilizadas
+## Technologies Used
 - JavaScript
 - React
 - Vite
 - React Router DOM
 - Axios
 - Tailwind CSS
-- Motion (Framer Motion)
-- Lenis (scroll suave)
-- Vercel - Deploy
+- Motion
+- Lenis (smooth scrolling)
+- Vercel (deployment)
 
-## Funcionalidades
-### Para Usuários
-- Catálogo de Produtos: Navegação fluida pelos produtos disponíveis
-- Sistema de Busca: Pesquisa por nome do produto
-- Carrinho de Compras:
-  - Adicionar/remover produtos
-  - Ajustar quantidades
-  - Visualização de total
-  - Dropdown animado com scroll suave customizado
-- Autenticação Completa:
-  - Login e cadastro de usuários
-  - Tokens JWT com duração de 7 dias
-  - Proteção de rotas (carrinho e compra requerem login)
-- Simulação de Compra: Modal de confirmação de pedido
+## Features
+### User Features
+- **Product Catalog**: Smooth navigation through available products
+- **Search System**: Search products by name
+- **Shopping Cart**:
+  - Add and remove products
+  - Adjust product quantities
+  - View cart total
+  - Animated dropdown with custom smooth scrolling
+- **Complete Authentication Flow**:
+  - User login and registration
+  - JWT tokens with a 7-day expiration
+  - Route protection (cart and checkout require authentication)
+- **Purchase Simulation**: Order confirmation modal
 
-### Para Administradores
-- Painel Admin Exclusivo: Acesso restrito por permissão
-- CRUD de Produtos:
-  - Criar novos produtos
-  - Editar produtos existentes
-  - Excluir produtos
-  - Todas as operações refletem em tempo real no banco
-- Gerenciamento Visual: Interface otimizada para administração
+### Admin Features
+- **Exclusive Admin Dashboard**: Permission-based access
+- **Product CRUD**:
+  - Create new products
+  - Edit existing products
+  - Delete products
+  - All operations are reflected in real time in the database
+- **Visual Management Interface**: Optimized UI for administration tasks
 
-## 👩‍💻 Desenvolvido por Emilly
-Se você chegou até aqui, obrigada por conferir o projeto! 🤍
+## 👩‍💻 Developed by Emilly
+If you made it this far, thank you for checking out the project! 🤍
