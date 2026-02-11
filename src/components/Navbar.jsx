@@ -42,7 +42,7 @@ const Navbar = () => {
               </Motion.h1>
             </Link>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1 md:gap-3">
               {user ? (
                 <>
                   <Motion.button
@@ -65,32 +65,29 @@ const Navbar = () => {
                       <Motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="bg-zinc-700 hover:bg-zinc-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 font-inter cursor-pointer"
+                        className="text-white px-2 py-2 md:px-3 flex items-center gap-2 font-inter hover:text-blue  cursor-pointer"
                       >
-                        <FiSettings size={18} />
-                        Gerenciar
+                        <FiSettings size={24} />
+                        <span className="hidden md:block">Gerenciar</span>
                       </Motion.button>
                     </Link>
                   )}
 
                   <div className="flex items-center gap-2 text-white">
-                    <FiUser size={20} />
-                    <span className="font-inter">{user.name}</span>
-                    {isAdmin && (
-                      <span className="bg-blue px-2 py-1 rounded text-xs font-semibold">
-                        ADMIN
-                      </span>
-                    )}
+                    <FiUser size={24} />
+                    <span className="font-inter">
+                      {user.name.split(" ")[0]}
+                    </span>
                   </div>
 
                   <Motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleLogout}
-                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2 font-inter cursor-pointer"
+                    className=" text-white px-2 py-2 md:px-3 flex md:pr-0  items-center gap-2 hover:text-red-500 font-inter cursor-pointer"
                   >
-                    <FiLogOut size={18} />
-                    Sair
+                    <FiLogOut size={24} />
+                    <span className="hidden md:block">Sair</span>
                   </Motion.button>
                 </>
               ) : (
