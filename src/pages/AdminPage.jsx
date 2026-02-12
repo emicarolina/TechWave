@@ -89,7 +89,7 @@ const AdminPage = () => {
       showNotification(
         selectedProduct
           ? "Produto atualizado com sucesso!"
-          : "Produto criado com sucesso!"
+          : "Produto criado com sucesso!",
       );
     } else {
       showNotification(result.error || "Erro ao salvar produto", "error");
@@ -99,11 +99,11 @@ const AdminPage = () => {
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto pt-15">
-        <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center flex-col lg:flex-row justify-between mb-6 md:mb-12">
           <Motion.h1
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-4xl md:text-5xl font-bold text-white font-raleway"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-white font-raleway"
           >
             Gerenciamento de Produtos
           </Motion.h1>
@@ -114,7 +114,7 @@ const AdminPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleNewProduct}
-            className="bg-blue hover:bg-blue/80 text-white font-semibold py-3 px-6 rounded-3xl transition-colors flex items-center gap-2 shadow-lg cursor-pointer"
+            className="bg-blue hover:bg-blue/80 text-white font-semibold py-2 px-4 md:py-3 md:px-6 rounded-3xl transition-colors flex items-center gap-2 shadow-lg cursor-pointer mt-2 md:mt-4 lg:mt-0"
           >
             <FiPlus size={20} />
             Novo Produto
