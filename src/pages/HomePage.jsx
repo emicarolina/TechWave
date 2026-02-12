@@ -23,7 +23,7 @@ const HomePage = () => {
         <Motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-5xl font-bold text-white text-center mb-5 font-raleway"
+          className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-5 font-raleway"
         >
           Nossos Produtos
         </Motion.h1>
