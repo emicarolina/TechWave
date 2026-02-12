@@ -18,8 +18,8 @@ const SearchBar = ({ searchTerm, onSearchChange, onClearSearch }) => {
           type="text"
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Buscar por nome, descrição ou categoria..."
-          className="w-full bg-zinc-800 text-white rounded-2xl pl-12 pr-12 py-4 focus:ring-2 focus:ring-blue focus:outline-none transition-all font-inter font-light placeholder:text-gray-400"
+          placeholder="Pesquisar por nome..."
+          className="w-full bg-zinc-800 text-white rounded-2xl pl-12 pr-12 py-3 md:py-4 focus:ring-2 focus:ring-blue focus:outline-none transition-all font-inter font-light placeholder:text-gray-400"
         />
 
         {searchTerm && (
