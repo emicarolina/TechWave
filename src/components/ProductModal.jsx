@@ -64,7 +64,7 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
       targetScroll += e.deltaY;
       targetScroll = Math.max(
         0,
-        Math.min(wrapper.scrollHeight - wrapper.clientHeight, targetScroll)
+        Math.min(wrapper.scrollHeight - wrapper.clientHeight, targetScroll),
       );
       if (!isAnimating) animate();
     };
@@ -264,17 +264,17 @@ const ProductModal = ({ isOpen, onClose, onSubmit, product = null }) => {
                   )}
                 </div>
 
-                <div className="flex gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <button
                     type="button"
                     onClick={handleClose}
-                    className="flex-1 bg-zinc-500 hover:bg-zinc-400 text-white py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer"
+                    className="w-full sm:flex-1 bg-zinc-500 hover:bg-zinc-400 text-white py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 bg-zinc-900 hover:bg-zinc-950 text-white py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer"
+                    className="w-full sm:flex-1 bg-zinc-900 hover:bg-zinc-950 text-white py-3 px-6 rounded-lg font-semibold transition-colors cursor-pointer"
                   >
                     {product ? "Atualizar" : "Criar Produto"}
                   </button>
