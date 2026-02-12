@@ -45,7 +45,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 pt-16">
+    <div className="min-h-dvh flex items-center justify-center px-4 pt-16">
       <Motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
