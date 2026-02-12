@@ -60,7 +60,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
       targetScroll += e.deltaY;
       targetScroll = Math.max(
         0,
-        Math.min(wrapper.scrollHeight - wrapper.clientHeight, targetScroll)
+        Math.min(wrapper.scrollHeight - wrapper.clientHeight, targetScroll),
       );
       if (!isAnimating) animate();
     };
@@ -102,7 +102,7 @@ const CartDropdown = ({ isOpen, onClose }) => {
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
-              className="fixed right-4 top-20 z-50 w-96 max-h-[80vh] bg-zinc-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+              className="fixed top-16 right-0 w-full h-[calc(100vh-4rem)] z-50 bg-zinc-800 rounded-none shadow-2xl flex flex-col overflow-hidden sm:top-20 sm:right-4 sm:w-96 sm:max-h-[80vh] sm:h-auto sm:rounded-2xl"
             >
               <div className="p-4 border-b border-zinc-700 shrink-0 z-10 bg-zinc-800 relative">
                 <h3 className="text-xl font-bold text-white font-raleway flex items-center gap-2">
