@@ -26,7 +26,7 @@ const Navbar = () => {
             <Link to="/">
               <Motion.h1
                 whileHover={{ scale: 1.05 }}
-                className="text-3xl font-bold font-raleway cursor-pointer"
+                className="text-2xl md:text-3xl font-bold font-raleway cursor-pointer"
               >
                 <ShinyText
                   text="TechWave"
@@ -42,22 +42,25 @@ const Navbar = () => {
               </Motion.h1>
             </Link>
 
-            <div className="flex items-center gap-1 md:gap-3">
+            <div className="flex items-center gap-0">
               {user ? (
                 <>
                   <Motion.button
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setIsCartOpen(!isCartOpen)}
-                    className="relative text-white hover:text-blue transition-colors cursor-pointer"
+                    className="text-white hover:text-blue transition-colors cursor-pointer flex items-center gap-2 px-1 md:px-3 md:pr-0 font-inter"
                   >
-                    <FiShoppingCart size={24} />
+                    <div className="relative">
+                      <FiShoppingCart size={20} />
 
-                    {totalItems > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-blue text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                        {totalItems}
-                      </span>
-                    )}
+                      {totalItems > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-blue text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                          {totalItems}
+                        </span>
+                      )}
+                    </div>
+                    <span className="hidden md:block">Carrinho</span>
                   </Motion.button>
 
                   {isAdmin && (
@@ -65,16 +68,16 @@ const Navbar = () => {
                       <Motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="text-white px-2 py-2 md:px-3 flex items-center gap-2 font-inter hover:text-blue  cursor-pointer"
+                        className="text-white px-2 md:px-3 md:pr-0 flex items-center gap-2 font-inter hover:text-blue  cursor-pointer"
                       >
-                        <FiSettings size={24} />
+                        <FiSettings size={20} />
                         <span className="hidden md:block">Gerenciar</span>
                       </Motion.button>
                     </Link>
                   )}
 
-                  <div className="flex items-center gap-2 text-white">
-                    <FiUser size={24} />
+                  <div className="flex items-center px-0 md:px-3 md:pr-0 gap-2 text-white">
+                    <FiUser size={20} />
                     <span className="font-inter">
                       {user.name.split(" ")[0]}
                     </span>
@@ -84,9 +87,9 @@ const Navbar = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleLogout}
-                    className=" text-white px-2 py-2 md:px-3 flex md:pr-0  items-center gap-2 hover:text-red-500 font-inter cursor-pointer"
+                    className=" text-white px-2 md:px-3 flex md:pr-0  items-center gap-2 hover:text-red-500 font-inter cursor-pointer"
                   >
-                    <FiLogOut size={24} />
+                    <FiLogOut size={20} />
                     <span className="hidden md:block">Sair</span>
                   </Motion.button>
                 </>
